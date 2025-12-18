@@ -1,0 +1,31 @@
+{
+  "name": "Vacaciones Familia Rubilar",
+  "short_name": "Rubilar Aruba",
+  "description": "Cuenta regresiva para el viaje a Aruba de la familia Rubilar.",
+  "id": "com.rubilar.vacaciones.aruba",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/fluency/192/beach.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://img.icons8.com/fluency/512/beach.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://img.icons8.com/fluency/512/beach.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
