@@ -1,0 +1,7 @@
+{
+  "name": "Vacaciones Familia Rubilar - Aruba Countdown2",
+  "description": "A luxury countdown experience for the Rubilar family's upcoming trip to Aruba, featuring real-time weather, travel tips, and a dynamic calendar.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
