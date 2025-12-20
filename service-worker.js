@@ -1,4 +1,3 @@
-
 const CACHE_NAME = 'rubilar-v5';
 
 self.addEventListener('install', (event) => {
