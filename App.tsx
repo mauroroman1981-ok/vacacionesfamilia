@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Palmtree, MapPin, Camera, Sparkles, Share2, CloudSun } from 'lucide-react';
 import { ArubaData, Countdown } from './types';
