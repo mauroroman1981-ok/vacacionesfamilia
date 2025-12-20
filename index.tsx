@@ -1,22 +1,21 @@
-mport React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
-// Registro robusto del Service Worker
+// Registro silencioso del Service Worker para evitar interrupciones
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
-      .then(reg => console.log('SW listo para instalación'))
-      .catch(err => console.error('Error en SW:', err));
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch(err => console.log('SW offline mode active'));
   });
 }
 
 const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error("Root no encontrado");
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}
