@@ -37,6 +37,7 @@
       text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(34, 211, 238, 0.3);
     }
     ::-webkit-scrollbar { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 
   <script type="importmap">
@@ -58,14 +59,12 @@
 </head>
 <body>
   <div id="root">
-    <!-- Cargador simple por si tarda el JS -->
     <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a;">
       <div style="text-align: center;">
         <div style="width: 40px; height: 40px; border: 3px solid #06b6d4; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-        <p style="font-family: sans-serif; font-size: 14px; color: #64748b;">Preparando las maletas...</p>
+        <p style="font-family: sans-serif; font-size: 14px; color: #64748b;">Preparando el paraíso...</p>
       </div>
     </div>
   </div>
-  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
