@@ -1,8 +1,10 @@
-
+// Fix Gemini initialization and API key access
 import { GoogleGenAI, Type } from "@google/genai";
 import { ArubaData } from "../types";
 
 export async function fetchArubaInsights(): Promise<ArubaData> {
+  // Always use process.env.API_KEY directly as a named parameter in the constructor
+  // Do not ask the user for the key or use UI elements to manage it.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   try {
@@ -46,9 +48,11 @@ export async function fetchArubaInsights(): Promise<ArubaData> {
       }
     });
 
-    const parsed = JSON.parse(response.text);
+    // Extract text using the .text property (not a method)
+    const jsonStr = response.text || '{}';
+    const parsed = JSON.parse(jsonStr);
     
-    // Extraer fuentes de grounding de forma segura
+    // Extract grounding sources as required when using googleSearch
     const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
     const groundingSources = groundingChunks.map((chunk: any) => {
       if (chunk.web) return { title: chunk.web.title, uri: chunk.web.uri };
@@ -57,9 +61,9 @@ export async function fetchArubaInsights(): Promise<ArubaData> {
     }).filter(Boolean);
 
     return {
-      weather: parsed.weather,
-      januaryClimate: parsed.januaryClimate,
-      tips: Array.isArray(parsed.tips) ? parsed.tips : [],
+      weather: parsed.weather || getFallbackData().weather,
+      januaryClimate: parsed.januaryClimate || getFallbackData().januaryClimate,
+      tips: Array.isArray(parsed.tips) ? parsed.tips : getFallbackData().tips,
       groundingSources: groundingSources as any[]
     };
   } catch (error) {
