@@ -4,12 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   
-  <!-- Configuración PWA / Android -->
   <meta name="theme-color" content="#06b6d4">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
-  <!-- Icono e Identidad -->
   <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/beach.png">
   <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/192/beach.png">
   <link rel="manifest" href="manifest.json">
@@ -24,8 +22,8 @@
       margin: 0;
       padding: 0;
       background-color: #0f172a;
+      color: white;
       overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
     }
     .font-vacation { font-family: 'Pacifico', cursive; }
     .font-handwritten { font-family: 'Caveat', cursive; }
@@ -38,7 +36,6 @@
     .text-shadow-vibrant {
       text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(34, 211, 238, 0.3);
     }
-    /* Ocultar scrollbars */
     ::-webkit-scrollbar { display: none; }
   </style>
 
@@ -50,17 +47,25 @@
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "lucide-react": "https://esm.sh/lucide-react@0.460.0",
     "date-fns": "https://esm.sh/date-fns@4.1.0",
+    "date-fns/locale": "https://esm.sh/date-fns@4.1.0/locale",
     "@google/genai": "https://esm.sh/@google/genai@1.3.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
     "date-fns/": "https://esm.sh/date-fns@^4.1.0/"
   }
 }
 </script>
 </head>
 <body>
-  <div id="root"></div>
-  <!-- ESTA LÍNEA ES LA QUE ARRANCA LA APP -->
-  <script type="module" src="index.tsx"></script>
+  <div id="root">
+    <!-- Cargador simple por si tarda el JS -->
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a;">
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border: 3px solid #06b6d4; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+        <p style="font-family: sans-serif; font-size: 14px; color: #64748b;">Preparando las maletas...</p>
+      </div>
+    </div>
+  </div>
+  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
