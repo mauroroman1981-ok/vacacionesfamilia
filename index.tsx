@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 
-// Registro silencioso del Service Worker para evitar interrupciones
+// El Service Worker se registra pero no bloqueamos la carga inicial
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .catch(err => console.log('SW offline mode active'));
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
   });
 }
 
