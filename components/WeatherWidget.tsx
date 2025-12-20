@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Sun, Wind, Droplets, ExternalLink, Waves, ThermometerSun, CloudRain } from 'lucide-react';
 import { ArubaData } from '../types';
@@ -28,19 +29,19 @@ const WeatherWidget: React.FC<Props> = ({ data, loading }) => {
             <Sun className="text-yellow-300 fill-yellow-300" />
             Aruba Hoy
           </h3>
-          <span className="text-3xl font-black">{data.weather.temp}°C</span>
+          <span className="text-3xl font-black">{data.weather?.temp ?? '--'}°C</span>
         </div>
         <p className="text-sm opacity-90 mb-4 font-medium capitalize">
-          {data.weather.description}
+          {data.weather?.description ?? 'Cargando condiciones...'}
         </p>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Droplets size={16} className="text-blue-300" />
-            <span className="text-xs font-semibold">{data.weather.humidity}% Hum</span>
+            <span className="text-xs font-semibold">{data.weather?.humidity ?? 0}% Hum</span>
           </div>
           <div className="flex items-center gap-2">
             <Wind size={16} className="text-emerald-300" />
-            <span className="text-xs font-semibold">{data.weather.windSpeed} km/h</span>
+            <span className="text-xs font-semibold">{data.weather?.windSpeed ?? 0} km/h</span>
           </div>
         </div>
       </div>
@@ -52,15 +53,15 @@ const WeatherWidget: React.FC<Props> = ({ data, loading }) => {
         <div className="grid grid-cols-1 gap-3">
           <div className="flex items-center justify-between text-xs">
             <span className="opacity-60 flex items-center gap-1"><ThermometerSun size={14} /> Temp. Media</span>
-            <span className="font-bold">{data.januaryClimate.avgTemp}</span>
+            <span className="font-bold">{data.januaryClimate?.avgTemp ?? '--'}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="opacity-60 flex items-center gap-1"><Waves size={14} /> Agua</span>
-            <span className="font-bold">{data.januaryClimate.waterTemp}</span>
+            <span className="font-bold">{data.januaryClimate?.waterTemp ?? '--'}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="opacity-60 flex items-center gap-1"><CloudRain size={14} /> Lluvias</span>
-            <span className="font-bold">{data.januaryClimate.rainDays}</span>
+            <span className="font-bold">{data.januaryClimate?.rainDays ?? '--'}</span>
           </div>
         </div>
       </div>
@@ -68,7 +69,7 @@ const WeatherWidget: React.FC<Props> = ({ data, loading }) => {
       <div className="border-t border-white/10 pt-4">
         <p className="text-[10px] uppercase tracking-wider mb-2 opacity-60 font-bold">Tips de viaje:</p>
         <ul className="space-y-2">
-          {data.tips.slice(0, 2).map((tip, i) => (
+          {data.tips?.slice(0, 2).map((tip, i) => (
             <li key={i} className="text-xs leading-relaxed flex gap-2">
               <span className="text-cyan-300">•</span> {tip}
             </li>
@@ -76,7 +77,7 @@ const WeatherWidget: React.FC<Props> = ({ data, loading }) => {
         </ul>
       </div>
 
-      {data.groundingSources.length > 0 && (
+      {(data.groundingSources?.length ?? 0) > 0 && (
         <div className="mt-2 text-right">
           <a 
             href={data.groundingSources[0].uri} 
@@ -84,7 +85,7 @@ const WeatherWidget: React.FC<Props> = ({ data, loading }) => {
             rel="noopener noreferrer"
             className="text-[9px] inline-flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity"
           >
-            Datos reales de Aruba <ExternalLink size={8} />
+            {data.groundingSources[0].title || 'Datos reales de Aruba'} <ExternalLink size={8} />
           </a>
         </div>
       )}
