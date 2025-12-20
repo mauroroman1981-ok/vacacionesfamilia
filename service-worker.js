@@ -1,39 +1,17 @@
 
-const CACHE_NAME = 'rubilar-v4';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  'https://cdn.tailwindcss.com'
-];
+const CACHE_NAME = 'rubilar-v5';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Intentamos cachear, pero si uno falla no bloqueamos todo el SW
-      return Promise.allSettled(ASSETS.map(url => cache.add(url)));
-    })
-  );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => Promise.all(
-      keys.map((key) => key !== CACHE_NAME && caches.delete(key))
-    ))
-  );
-  self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  // Estrategia: Intentar red, si falla usar lo que haya en cache
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => {
-        // Fallback si no hay red ni caché
-        return caches.match('./index.html');
-      });
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
