@@ -16,6 +16,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Pacifico&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
   
+  <script>
+    // Polyfill crítico para evitar errores de 'process is not defined' en el navegador
+    window.process = { 
+      env: { 
+        NODE_ENV: 'production',
+        API_KEY: '' 
+      } 
+    };
+  </script>
+
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
