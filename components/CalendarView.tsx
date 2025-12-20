@@ -1,7 +1,8 @@
-
+// Fix date-fns import issues by using sub-module paths where named exports from root might fail
 import React from 'react';
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { format, addMonths, endOfMonth, eachDayOfInterval, isSameDay, isToday } from 'date-fns';
+import startOfMonth from 'date-fns/startOfMonth';
+import { es } from 'date-fns/locale/es';
 import { Plane, Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Props {
