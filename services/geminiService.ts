@@ -1,13 +1,14 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { ArubaData } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function fetchArubaInsights(): Promise<ArubaData> {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: "Proporciona el clima actual en Oranjestad, Aruba. También incluye promedios históricos para el mes de enero (temperatura media, temperatura del agua, días de lluvia) y 3 consejos cortos de viaje para la familia Rubilar. El formato debe ser JSON.",
+      contents: "Proporciona datos climáticos detallados para hoy en Aruba y consejos de viaje para enero de 2026.",
       config: {
         tools: [{ googleSearch: {} }],
         responseMimeType: "application/json",
@@ -22,12 +23,9 @@ export async function fetchArubaInsights(): Promise<ArubaData> {
                 description: { type: Type.STRING },
                 humidity: { type: Type.NUMBER },
                 windSpeed: { type: Type.NUMBER },
-                conditionType: { 
-                  type: Type.STRING, 
-                  description: "Categoría simple: sunny, cloudy, rainy, windy" 
-                }
+                conditionType: { type: Type.STRING }
               },
-              required: ["temp", "condition", "description", "conditionType"]
+              required: ["temp", "condition", "description", "humidity", "windSpeed", "conditionType"]
             },
             januaryClimate: {
               type: Type.OBJECT,
@@ -38,9 +36,9 @@ export async function fetchArubaInsights(): Promise<ArubaData> {
               },
               required: ["avgTemp", "waterTemp", "rainDays"]
             },
-            tips: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING }
+            tips: { 
+              type: Type.ARRAY, 
+              items: { type: Type.STRING } 
             }
           },
           required: ["weather", "januaryClimate", "tips"]
@@ -48,40 +46,48 @@ export async function fetchArubaInsights(): Promise<ArubaData> {
       }
     });
 
-    const data = JSON.parse(response.text);
-    const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
-      ?.map((chunk: any) => ({
-        title: chunk.web?.title || "Fuente",
-        uri: chunk.web?.uri
-      }))
-      .filter((s: any) => s.uri) || [];
+    const parsed = JSON.parse(response.text);
+    
+    // Extraer fuentes de grounding de forma segura
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+    const groundingSources = groundingChunks.map((chunk: any) => {
+      if (chunk.web) return { title: chunk.web.title, uri: chunk.web.uri };
+      if (chunk.maps) return { title: chunk.maps.title, uri: chunk.maps.uri };
+      return null;
+    }).filter(Boolean);
 
     return {
-      ...data,
-      groundingSources: sources
+      weather: parsed.weather,
+      januaryClimate: parsed.januaryClimate,
+      tips: Array.isArray(parsed.tips) ? parsed.tips : [],
+      groundingSources: groundingSources as any[]
     };
   } catch (error) {
-    console.error("Error fetching Gemini insights:", error);
-    return {
-      weather: {
-        temp: 29,
-        condition: "Soleado",
-        description: "Clima perfecto para la playa",
-        humidity: 70,
-        windSpeed: 20,
-        conditionType: 'sunny'
-      },
-      januaryClimate: {
-        avgTemp: "27°C - 30°C",
-        waterTemp: "26°C",
-        rainDays: "8 días"
-      },
-      tips: [
-        "No olvides visitar Eagle Beach al atardecer.",
-        "Prueben el Papiamento, el idioma local.",
-        "Alquilen un 4x4 para explorar el Parque Nacional Arikok."
-      ],
-      groundingSources: []
-    };
+    console.error("Error fetching Aruba insights:", error);
+    return getFallbackData();
   }
+}
+
+function getFallbackData(): ArubaData {
+  return {
+    weather: {
+      temp: 29,
+      condition: "Soleado",
+      description: "Cielo despejado en Oranjestad",
+      humidity: 72,
+      windSpeed: 18,
+      conditionType: 'sunny'
+    },
+    januaryClimate: {
+      avgTemp: "28°C",
+      waterTemp: "26°C",
+      rainDays: "7 días"
+    },
+    tips: [
+      "Visiten Baby Beach para aguas tranquilas.",
+      "Lleven protector solar biodegradable.",
+      "Cenen en Zeerover para pescado fresco."
+    ],
+    groundingSources: []
+  };
 }
